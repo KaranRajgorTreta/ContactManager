@@ -54,20 +54,28 @@ namespace ContactManager.Service
             }
         }
 
-        public async Task<List<ViewContact>> GetContactList()
+        public async Task<List<ViewContact>> GetContactList(string searchQuery = "")
         {
             try
             {
-                return await _context.Contacts
-            .Select(c => new ViewContact
-            {
-                Id = c.Id,
-                Name = c.Name,
-                Email = c.Email,
-                Phone = c.Phone,
-                Address = c.Address
-            })
-            .ToListAsync();
+                var query = _context.Contacts.AsQueryable();
+
+                if (!string.IsNullOrEmpty(searchQuery))
+                {
+                    query = query.Where(c => c.Name.Contains(searchQuery) ||
+                                             c.Email.Contains(searchQuery) ||
+                                             c.Phone.Contains(searchQuery) ||
+                                             c.Address.Contains(searchQuery));
+                }
+
+                return await query.Select(c => new ViewContact
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Email = c.Email,
+                    Phone = c.Phone,
+                    Address = c.Address
+                }).ToListAsync();
             }
             catch (Exception ex)
             {

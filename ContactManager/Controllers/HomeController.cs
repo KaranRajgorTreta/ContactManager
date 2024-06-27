@@ -95,11 +95,11 @@ namespace ContactManager.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetContactList()
+        public async Task<IActionResult> GetContactList(string searchQuery)
         {
             try
             {
-                var contacts = await _contactService.GetContactList();
+                var contacts = await _contactService.GetContactList(searchQuery);
                 return Ok(new ApiResponse<List<ViewContact>>(true, "Contacts retrieved successfully.", contacts));
             }
             catch (Exception ex)

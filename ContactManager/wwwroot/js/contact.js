@@ -141,9 +141,10 @@ function createContact(contact) {
     });
 }
 
-function getContactList() {
+function getContactList(searchQuery = "") {
     $.ajax({
         url: '/Home/GetContactList',
+        data: { searchQuery: searchQuery },
         type: 'GET',
         success: function (response) {
             if (response && response.success && response.data) {
@@ -227,3 +228,8 @@ function deleteContact(id) {
         }
     });
 }
+
+$('#txtSearch').on('input', function () {
+    var searchQuery = $(this).val();
+    getContactList(searchQuery);
+});

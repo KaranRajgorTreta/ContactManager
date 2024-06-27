@@ -8,6 +8,6 @@ namespace ContactManager.Interface
         public Task<int> UpdateContact(int id,UpdateContact request);
         public Task<int> DeleteContact(int id);
         public Task<ViewContact> ViewContact(int id);
-        public Task<List<ViewContact>> GetContactList();
+        public Task<List<ViewContact>> GetContactList(string searchQuery = "");
     }
 }
