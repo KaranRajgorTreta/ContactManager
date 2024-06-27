@@ -2,7 +2,6 @@ using ContactManager.Database;
 using ContactManager.Interface;
 using ContactManager.Service;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Hosting;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -15,15 +14,6 @@ builder.Services.AddControllersWithViews();
 builder.Services.AddTransient<IContact, ContactService>();
 
 var app = builder.Build();
-
-using (var scope = app.Services.CreateScope())
-{
-    var services = scope.ServiceProvider;
-    var context = services.GetRequiredService<ApplicationDbContext>();
-
-    // Ensure database is created and apply migrations.
-    context.Database.Migrate();
-}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
