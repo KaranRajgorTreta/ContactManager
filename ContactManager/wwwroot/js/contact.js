@@ -114,7 +114,7 @@ function getContactList(searchQuery = "") {
                 tbody.empty();
 
                 contacts.forEach(function (contact) {
-                    var row = $(`<tr>
+                    var row = $(`<tr data-id="${contact.id}">
                         <td>${contact.name}</td>
                         <td>
                             <button type="button" class="btn btn-sm btn-success view-btn"  data-id="${contact.id}"  >View</button>
@@ -123,6 +123,10 @@ function getContactList(searchQuery = "") {
                     tbody.append(row);
                 });
                 $('.view-btn').click(function () {
+                    var contactId = $(this).data('id');
+                    viewContact(contactId);
+                });
+                tbody.find('tr').dblclick(function () {
                     var contactId = $(this).data('id');
                     viewContact(contactId);
                 });
