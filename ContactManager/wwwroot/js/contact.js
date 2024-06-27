@@ -34,6 +34,7 @@ function resetForm() {
     $('#txtPhone').val('');
     $('#txtEmail').val('');
     $('#txtName').val('');
+    $('#deleteContact').hide();
 }
 
 function updateContact(id, contact) {
@@ -134,6 +135,7 @@ function viewContact(id) {
                 $('#txtPhone').val(response.data.phone);
                 $('#txtEmail').val(response.data.email);
                 $('#txtName').val(response.data.name);
+                $('#deleteContact').show();
                 $('#deleteContact').val(id);
                 $('#hdnId').val(id);
                 $('#contactInformation').modal('show');
@@ -177,3 +179,8 @@ $('#deleteContact').click(function () {
         deleteContact(contactId);
     }
 });
+
+
+$('#contactInformation').on('hidden.bs.modal', function (e) {
+    resetForm();
+})
