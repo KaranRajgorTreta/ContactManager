@@ -1,39 +1,4 @@
-﻿$(document).ready(function () {
-    
-    function viewContact(id) {
-        $.ajax({
-            url: '/Home/ViewContact?id=' + id,
-            type: 'GET',
-            success: function (response) {
-                if (response.success) {
-                    resetForm();
-                    // Display contact details
-                    $('#txtAddress').val(response.data.address);
-                    $('#txtPhone').val(response.data.phone);
-                    $('#txtEmail').val(response.data.email);
-                    $('#txtName').val(response.data.name);
-                    $('#hdnId').val(id);
-                    $('#contactInformation').modal('show');
-                } else {
-                    alert('Error: ' + response.message);
-                }
-            },
-            error: function (xhr) {
-                alert('An error occurred: ' + xhr.responseText);
-            }
-        });
-    }
-    
-    function resetForm() {
-        $('#hdnId').val(0);
-        $('#txtAddress').val();
-        $('#txtPhone').val();
-        $('#txtEmail').val();
-        $('#txtName').val();
-    }
-
-});
-
+﻿
 function initMap() {
     var address = '';
     var geocoder = new google.maps.Geocoder();
@@ -54,11 +19,6 @@ function initMap() {
     });
 }
 
-//initMap();
-
-function viewInfo(id) {
-    console.log(id);
-}
 
 $('#btnNew').on('click', function () {
     resetForm();
@@ -158,7 +118,6 @@ function getContactList(searchQuery = "") {
                         <td>${contact.name}</td>
                         <td>
                             <button type="button" class="btn btn-sm btn-success view-btn"  data-id="${contact.id}"  >View</button>
-                            <button type="button" class="btn btn-sm btn-danger delete-btn" data-id="${contact.id}">Delete</button>
                         </td>
                     </tr>  `);
                     tbody.append(row);
@@ -168,13 +127,6 @@ function getContactList(searchQuery = "") {
                     viewContact(contactId);
                 });
 
-                $('.delete-btn').click(function () {
-                    var contactId = $(this).data('id');
-                    if (confirm("Do you really want to delete this ?")) {
-                        deleteContact(contactId);
-                    }
-
-                });
             } else {
                 alert('Error: ' + response.message);
             }
@@ -199,6 +151,7 @@ function viewContact(id) {
                 $('#txtPhone').val(response.data.phone);
                 $('#txtEmail').val(response.data.email);
                 $('#txtName').val(response.data.name);
+                $('#deleteContact').val(id);
                 $('#hdnId').val(id);
                 $('#contactInformation').modal('show');
             } else {
@@ -218,6 +171,7 @@ function deleteContact(id) {
         success: function (response) {
             if (response.success) {
                 alert('Contact deleted successfully.');
+                $('#contactInformation').modal('hide');
                 getContactList();
             } else {
                 alert('Error: ' + response.message);
@@ -232,4 +186,11 @@ function deleteContact(id) {
 $('#txtSearch').on('input', function () {
     var searchQuery = $(this).val();
     getContactList(searchQuery);
+});
+
+$('#deleteContact').click(function () {
+    var contactId = $('#hdnId').val();
+    if (confirm("Do you really want to delete this ?")) {
+        deleteContact(contactId);
+    }
 });
