@@ -27,54 +27,74 @@ namespace ContactUnitTest
         [Fact]
         public async Task CreateContact_ReturnsOkResult_WithValidContactId()
         {
-            // Arrange
-            var newContact = new CreateContact
+            try
             {
-                Name = "Jane Doe",
-                Email = "jane@example.com",
-                Phone = "9876543210",
-                Address = "456 Main St"
-            };
-            var expectedContactId = 1;
+                // Arrange
+                var newContact = new CreateContact
+                {
+                    Name = "Jane Doe",
+                    Email = "jane@example.com",
+                    Phone = "9876543210",
+                    Address = "456 Main St"
+                };
+                var expectedContactId = 1;
 
-            _mockContactService.Setup(service => service.CreateContact(newContact))
-                .ReturnsAsync(expectedContactId);
+                _mockContactService.Setup(service => service.CreateContact(newContact))
+                    .ReturnsAsync(expectedContactId);
 
-            // Act
-            var result = await _controller.CreateContact(newContact);
+                // Act
+                var result = await _controller.CreateContact(newContact);
 
-            // Assert
-            var okResult = Xunit.Assert.IsType<OkObjectResult>(result);
-            var apiResponse = Xunit.Assert.IsType<ApiResponse<int>>(okResult.Value);
-            Xunit.Assert.True(apiResponse.Success);
-            Xunit.Assert.Equal(expectedContactId, apiResponse.Data);
+                // Assert
+                var okResult = Xunit.Assert.IsType<OkObjectResult>(result);
+                var apiResponse = Xunit.Assert.IsType<ApiResponse<int>>(okResult.Value);
+                Xunit.Assert.True(apiResponse.Success);
+                Xunit.Assert.Equal(expectedContactId, apiResponse.Data);
+                Console.WriteLine("Test CreateContact_ReturnsOkResult_WithValidContactId passed.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Test CreateContact_ReturnsOkResult_WithValidContactId faild.");
+                throw;
+            }
+            
         }
 
         [Fact]
         public async Task CreateContact_ReturnsServerError_OnException()
         {
-            // Arrange
-            var newContact = new CreateContact
+            try
             {
-                Name = "Jane Doe",
-                Email = "jane@example.com",
-                Phone = "9876543210",
-                Address = "456 Main St"
-            };
+                // Arrange
+                var newContact = new CreateContact
+                {
+                    Name = "Jane Doe",
+                    Email = "jane@example.com",
+                    Phone = "9876543210",
+                    Address = "456 Main St"
+                };
 
-            _mockContactService.Setup(service => service.CreateContact(newContact))
-                .ThrowsAsync(new Exception("Database error"));
+                _mockContactService.Setup(service => service.CreateContact(newContact))
+                    .ThrowsAsync(new Exception("Database error"));
 
-            // Act
-            var result = await _controller.CreateContact(newContact);
+                // Act
+                var result = await _controller.CreateContact(newContact);
 
-            // Assert
-            var objectResult = Xunit.Assert.IsType<ObjectResult>(result);
-            Xunit.Assert.Equal(500, objectResult.StatusCode);
-            var apiResponse = Xunit.Assert.IsType<ApiResponse<string>>(objectResult.Value);
-            Xunit.Assert.False(apiResponse.Success);
-            Xunit.Assert.Equal("An error occurred.", apiResponse.Message);
-            Xunit.Assert.Equal("Database error", apiResponse.Data);
+                // Assert
+                var objectResult = Xunit.Assert.IsType<ObjectResult>(result);
+                Xunit.Assert.Equal(500, objectResult.StatusCode);
+                var apiResponse = Xunit.Assert.IsType<ApiResponse<string>>(objectResult.Value);
+                Xunit.Assert.False(apiResponse.Success);
+                Xunit.Assert.Equal("An error occurred.", apiResponse.Message);
+                Xunit.Assert.Equal("Database error", apiResponse.Data);
+                Console.WriteLine("Test CreateContact_ReturnsServerError_OnException passed.");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Test CreateContact_ReturnsServerError_OnException failed.");
+                throw;
+            }
+            
         }
 
     }
